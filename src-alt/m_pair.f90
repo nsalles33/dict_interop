@@ -5,6 +5,7 @@ module m_pair
   use m_objects, only : c_object, objects, ivalue
   implicit none
 
+
   ! Type pair for (key, value)
   type pair
     character(:), allocatable :: key
@@ -86,7 +87,7 @@ module m_pair
      type(pair), intent(out) :: lhs
      type(pair), intent(in)  :: rhs
      lhs% key = rhs% key
-     allocate(lhs% object)
+     !allocate(lhs% object)
      lhs% object = rhs% object
   end subroutine assign
 

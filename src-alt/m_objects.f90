@@ -37,6 +37,11 @@ module m_objects
 
   interface assignment(=)
     module procedure :: copy_ival
+    !module procedure :: copy_cobj
+  end interface assignment(=)
+
+  interface assignment(=)
+    !module procedure :: copy_ival
     module procedure :: copy_cobj
   end interface assignment(=)
 

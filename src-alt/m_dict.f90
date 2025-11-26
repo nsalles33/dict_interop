@@ -112,8 +112,13 @@ module m_dict
     print*, " > add_keyval: pairs: ", size(self% pairs)
 
     self% npairs = self% npairs + 1
-
-    self% pairs(self% npairs) = pair( key, val )
+    !self% pairs(self% npairs) = pair( key, val )
+    self% pairs(self% npairs)% key = key
+    !self% pairs(self% npairs)% object = objects(val)
+    select type(val)
+      type is(integer)
+        self% pairs(self% npairs)% object = ivalue( val )
+    end select
 
     print*, " > add_keyval: new pairs: ", self% pairs(self% npairs)% key
 
