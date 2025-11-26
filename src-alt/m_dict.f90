@@ -75,15 +75,21 @@ module m_dict
       self% pairs(self% npairs) = pair( key, val )
 
     else
-      ! Allocate
-      tmp = self% pairs
-      idx = self% nmax + 4
-      allocate( self% pairs(idx) )
-      self% pairs(:self%nmax) = tmp
+      if( allocated(self% pairs) )then
+        ! Allocated
+        tmp = self% pairs
+        idx = self% nmax + 4
+        allocate( self% pairs(idx) )
+        self% pairs(:self%nmax) = tmp
+        self% nmax = idx
+      else 
+        idx = 4
+        allocate( self% pairs(idx) )
+        self% nmax = idx
+      endif
 
       self% npairs = self% npairs + 1
       self% pairs(self% npairs) = pair( key, val )
-      self% nmax = idx
     endif
 
   end subroutine add_keyval_0D

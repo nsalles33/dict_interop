@@ -2,7 +2,7 @@
 
 
 F90 := gfortran
-FFLAGS := -O0 -pedantic -fcheck=all
+FFLAGS := -g -O0 -pedantic -fcheck=all
 
 
 source := $(wildcard m_*.f90)
