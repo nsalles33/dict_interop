@@ -47,9 +47,12 @@ module m_objects
     integer, intent(in) :: val
     integer :: s
 
+    print*, " > ival_rk0_constructor: ", val
+
     allocate( this% val(1) )
     this% val(1) = val
     this% object = c_loc(this% val)
+    print*, " > ival_rk0_constructor: ", associated(this% val), c_associated(this% object)
 
     this% kind = 'i'
     this% sizes = shape(this% val)

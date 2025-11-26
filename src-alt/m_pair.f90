@@ -36,12 +36,15 @@ module m_pair
     this% key = key
     select type( value )
       type is( integer )
+        print*, " > pair_rk0_constructor:", key, value
         !this% object = objects( value )
         this% object = ivalue( value )
       class default
         !ERROR( "Value kind is not taking into account" )
         print*, "Value kind is not taking into account"
     end select
+
+    print*, " > pair_rk0_constructor: obejct:", this% object% kind 
 
   end function pair_rk0_constructor
 
@@ -83,6 +86,7 @@ module m_pair
      type(pair), intent(out) :: lhs
      type(pair), intent(in)  :: rhs
      lhs% key = rhs% key
+     allocate(lhs% object)
      lhs% object = rhs% object
   end subroutine assign
 

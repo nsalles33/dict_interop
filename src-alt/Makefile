@@ -4,11 +4,15 @@
 F90 := gfortran
 FFLAGS := -g -O0 -pedantic -fcheck=all
 
+OBJ := Obj
 
 source := $(wildcard m_*.f90)
 source.o := $(source:%.f90=%.o) 
 
 default: lib test.x
+
+$(OBJ):
+	@if [ ! -d $(OBJ) ]; then mkdir $(OBJ) ; fi
 
 test.x: $(source.o) test.f90
 	$(F90) $(FFLAGS) -o $@ $^
@@ -20,7 +24,7 @@ lib:
 
 
 clean:
-	rm -f *.x *.o *.mod
+	rm -rf *.x *.x.* *.o *.mod
 
 
 m_dict.o: m_pair.o

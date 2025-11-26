@@ -4,6 +4,8 @@ module m_dict
   use m_pair
   implicit none
 
+  integer, parameter :: addmem = 4
+
   type dict
     character(:), allocatable :: name
     type(pair), allocatable :: pairs(:)
@@ -17,7 +19,29 @@ module m_dict
     procedure :: print
   end type dict
 
+  interface dict
+    module procedure :: dict_constructor
+  end interface
+
+
  CONTAINS
+
+  !.................................................
+  type(dict) function dict_constructor( name )result( this )
+    character(*), intent(in), optional :: name
+    character(*), parameter :: default = "not defined"
+
+    if( present(name) )then
+      this% name = trim(name)
+    else
+      this% name = default
+    endif
+
+    allocate( this% pairs(addmem) )
+    this% nmax = addmem 
+
+  end function dict_constructor
+
 
   !.................................................
   subroutine add_pair( self, p )
@@ -70,27 +94,28 @@ module m_dict
       return
     endif
 
-    if( self% npairs < self% nmax )then
-      self% npairs = self% npairs + 1
-      self% pairs(self% npairs) = pair( key, val )
+    if(self% nmax == 0 )then
+      ! New space
+       allocate( self% pairs(addmem) )
+       self% nmax = addmem
 
-    else
-      if( allocated(self% pairs) )then
-        ! Allocated
-        tmp = self% pairs
-        idx = self% nmax + 4
-        allocate( self% pairs(idx) )
-        self% pairs(:self%nmax) = tmp
-        self% nmax = idx
-      else 
-        idx = 4
-        allocate( self% pairs(idx) )
-        self% nmax = idx
-      endif
+    else if( self% npairs >= self% nmax )then
+      ! New space needed
+      tmp = self% pairs
+      idx = self% nmax + addmem
+      allocate( self% pairs(idx) )
+      self% pairs(:self%nmax) = tmp
+      self% nmax = idx      
 
-      self% npairs = self% npairs + 1
-      self% pairs(self% npairs) = pair( key, val )
     endif
+
+    print*, " > add_keyval: pairs: ", size(self% pairs)
+
+    self% npairs = self% npairs + 1
+
+    self% pairs(self% npairs) = pair( key, val )
+
+    print*, " > add_keyval: new pairs: ", self% pairs(self% npairs)% key
 
   end subroutine add_keyval_0D
 
